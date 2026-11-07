@@ -1,0 +1,404 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ───────── Font ───────── -->
+    <FontFamily x:Key="UiFont">avares://GpmPayWebhookLocal/Assets/Fonts#Be Vietnam Pro</FontFamily>
+    <FontFamily x:Key="MonoFont">Cascadia Mono, Consolas, Menlo, SF Mono, DejaVu Sans Mono, Liberation Mono, monospace</FontFamily>
+
+    <!-- ───────── Màu ───────── -->
+    <SolidColorBrush x:Key="BodyBrush" Color="#0F6B57" />
+    <SolidColorBrush x:Key="BodyDeepBrush" Color="#0A4D3F" />
+    <SolidColorBrush x:Key="HoleBrush" Color="#062F27" />
+    <SolidColorBrush x:Key="MintBrush" Color="#8CF0CF" />
+    <SolidColorBrush x:Key="PaperBrush" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="InkBrush" Color="#0B1F1A" />
+    <SolidColorBrush x:Key="Ink2Brush" Color="#4B5E58" />
+    <SolidColorBrush x:Key="OnBody2Brush" Color="#CDEBE2" />
+    <SolidColorBrush x:Key="LineBrush" Color="#E3EAE7" />
+    <SolidColorBrush x:Key="FieldBorderBrush" Color="#B9C8C3" />
+    <SolidColorBrush x:Key="FieldHoverBrush" Color="#7E968F" />
+    <SolidColorBrush x:Key="ChipBrush" Color="#E3F4EE" />
+    <SolidColorBrush x:Key="LogBgBrush" Color="#F2F6F4" />
+    <SolidColorBrush x:Key="AmberBrush" Color="#F5A524" />
+    <SolidColorBrush x:Key="YellowBrush" Color="#FFD166" />
+    <SolidColorBrush x:Key="OutBrush" Color="#B4530A" />
+    <SolidColorBrush x:Key="ErrorBrush" Color="#B3261E" />
+    <SolidColorBrush x:Key="WhiteHoverBrush" Color="#1FFFFFFF" />
+
+    <!-- ───────── Ghi đè màu của Fluent cho ô nhập / ô chọn ───────── -->
+    <SolidColorBrush x:Key="TextControlForeground" Color="#0B1F1A" />
+    <SolidColorBrush x:Key="TextControlForegroundPointerOver" Color="#0B1F1A" />
+    <SolidColorBrush x:Key="TextControlForegroundFocused" Color="#0B1F1A" />
+    <SolidColorBrush x:Key="TextControlBackground" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="TextControlBorderBrush" Color="#B9C8C3" />
+    <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="#7E968F" />
+    <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#0F6B57" />
+    <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#8CF0CF" />
+    <SolidColorBrush x:Key="TextControlButtonForeground" Color="#4B5E58" />
+    <Thickness x:Key="TextControlBorderThemeThicknessFocused">2</Thickness>
+
+    <SolidColorBrush x:Key="ComboBoxBackground" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="ComboBoxBackgroundPressed" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="ComboBoxBorderBrush" Color="#B9C8C3" />
+    <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="#7E968F" />
+    <SolidColorBrush x:Key="ComboBoxBorderBrushPressed" Color="#0F6B57" />
+    <SolidColorBrush x:Key="ComboBoxForeground" Color="#0B1F1A" />
+    <SolidColorBrush x:Key="ComboBoxDropDownGlyphForeground" Color="#4B5E58" />
+    <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#B9C8C3" />
+    <SolidColorBrush x:Key="ComboBoxItemForeground" Color="#0B1F1A" />
+    <SolidColorBrush x:Key="ComboBoxItemBackgroundPointerOver" Color="#F2F6F4" />
+    <SolidColorBrush x:Key="ComboBoxItemBackgroundPressed" Color="#E3F4EE" />
+    <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#E3F4EE" />
+    <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#E3F4EE" />
+    <SolidColorBrush x:Key="ComboBoxItemForegroundSelected" Color="#0B1F1A" />
+    <SolidColorBrush x:Key="ComboBoxItemForegroundPointerOver" Color="#0B1F1A" />
+
+    <!-- ───────── Biểu tượng (viewBox 24) ───────── -->
+    <StreamGeometry x:Key="IcClose">M18,6 L6,18 M6,6 L18,18</StreamGeometry>
+    <StreamGeometry x:Key="IcPower">M12,2 V12 M18.4,6.6 A9,9 0 1 1 5.63,6.64</StreamGeometry>
+    <StreamGeometry x:Key="IcVolume">M11,5 L6,9 H2 V15 H6 L11,19 Z M15.54,8.46 A5,5 0 0 1 15.54,15.53 M19.07,4.93 A10,10 0 0 1 19.07,19.07</StreamGeometry>
+    <StreamGeometry x:Key="IcMuted">M11,5 L6,9 H2 V15 H6 L11,19 Z M22,9 L16,15 M16,9 L22,15</StreamGeometry>
+    <StreamGeometry x:Key="IcPlay">M6,3 L20,12 L6,21 Z</StreamGeometry>
+    <StreamGeometry x:Key="IcSliders">M21,4 H14 M10,4 H3 M21,12 H12 M8,12 H3 M21,20 H16 M12,20 H3 M14,2 V6 M8,10 V14 M16,18 V22</StreamGeometry>
+    <StreamGeometry x:Key="IcActivity">M22,12 H18 L15,21 L9,3 L6,12 H2</StreamGeometry>
+    <StreamGeometry x:Key="IcReceipt">M4,2 V22 L6,21 L8,22 L10,21 L12,22 L14,21 L16,22 L18,21 L20,22 V2 L18,3 L16,2 L14,3 L12,2 L10,3 L8,2 L6,3 Z M8,8 H16 M8,12 H16 M8,16 H13</StreamGeometry>
+    <StreamGeometry x:Key="IcTerminal">M4,17 L10,11 L4,5 M12,19 H20</StreamGeometry>
+    <StreamGeometry x:Key="IcEye">M2,12 C2,12 5.5,5 12,5 C18.5,5 22,12 22,12 C22,12 18.5,19 12,19 C5.5,19 2,12 2,12 Z M15,12 A3,3 0 1 1 9,12 A3,3 0 1 1 15,12</StreamGeometry>
+    <StreamGeometry x:Key="IcCopy">M11,9 H20 A2,2 0 0 1 22,11 V20 A2,2 0 0 1 20,22 H11 A2,2 0 0 1 9,20 V11 A2,2 0 0 1 11,9 Z M5,15 H4 A2,2 0 0 1 2,13 V4 A2,2 0 0 1 4,2 H13 A2,2 0 0 1 15,4 V5</StreamGeometry>
+    <StreamGeometry x:Key="IcRefresh">M3,12 A9,9 0 0 1 12,3 A9.75,9.75 0 0 1 18.74,5.74 L21,8 M21,3 V8 H16 M21,12 A9,9 0 0 1 12,21 A9.75,9.75 0 0 1 5.26,18.26 L3,16 M8,16 H3 V21</StreamGeometry>
+    <StreamGeometry x:Key="IcWarning">M21.73,18 L13.73,4 A2,2 0 0 0 10.25,4 L2.25,18 A2,2 0 0 0 4,21 H20 A2,2 0 0 0 21.73,18 Z M12,9 V13 M12,17 H12.01</StreamGeometry>
+
+    <BoxShadows x:Key="CardShadow">0 6 18 0 #5904281F</BoxShadows>
+    <BoxShadows x:Key="SheetShadow">0 -4 24 0 #5904281F</BoxShadows>
+    <BoxShadows x:Key="RaisedShadow">0 3 10 0 #5904281F</BoxShadows>
+
+    <!-- ═════════ Nút tròn (nguồn / tắt tiếng) — màu đặt trong code ═════════ -->
+    <ControlTheme x:Key="RoundButton" TargetType="Button">
+        <Setter Property="Width" Value="56" />
+        <Setter Property="Height" Value="56" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="CornerRadius" Value="28" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Border Name="Bd" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" />
+                    <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <Border Name="Focus" Margin="-4" CornerRadius="32" BorderThickness="2.5"
+                            BorderBrush="{StaticResource YellowBrush}" IsVisible="False" />
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+        <!-- class "raised": nút đang bật → nổi lên -->
+        <Style Selector="^.raised /template/ Border#Bd">
+            <Setter Property="BoxShadow" Value="{StaticResource RaisedShadow}" />
+        </Style>
+        <Style Selector="^:pressed">
+            <Setter Property="RenderTransform" Value="scale(0.94)" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#Focus">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+    </ControlTheme>
+
+    <!-- ═════════ Nút biểu tượng trên thân loa ═════════ -->
+    <ControlTheme x:Key="IconButton" TargetType="Button">
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Border Name="Bd" Background="{TemplateBinding Background}" CornerRadius="12">
+                        <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
+                                          HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <Border Name="Focus" Margin="-2" CornerRadius="14" BorderThickness="2.5"
+                            BorderBrush="{StaticResource YellowBrush}" IsVisible="False" />
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover /template/ Border#Bd">
+            <Setter Property="Background" Value="{StaticResource WhiteHoverBrush}" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#Focus">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+    </ControlTheme>
+
+    <!-- ═════════ Nút viền mờ (Đọc thử) ═════════ -->
+    <ControlTheme x:Key="GhostButton" TargetType="Button">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Border Name="Bd" Background="{TemplateBinding Background}" BorderBrush="#73FFFFFF" BorderThickness="1"
+                            CornerRadius="16" Padding="12,6,14,6">
+                        <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" VerticalAlignment="Center" />
+                    </Border>
+                    <Border Name="Focus" Margin="-3" CornerRadius="19" BorderThickness="2.5"
+                            BorderBrush="{StaticResource YellowBrush}" IsVisible="False" />
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover /template/ Border#Bd">
+            <Setter Property="Background" Value="{StaticResource WhiteHoverBrush}" />
+        </Style>
+        <Style Selector="^:pressed">
+            <Setter Property="RenderTransform" Value="scale(0.97)" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#Focus">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+    </ControlTheme>
+
+    <!-- ═════════ Nút ở thanh đáy ═════════ -->
+    <ControlTheme x:Key="DockButton" TargetType="ToggleButton">
+        <Setter Property="Foreground" Value="{StaticResource OnBody2Brush}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="FontSize" Value="11.5" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Margin" Value="3,0" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Border Name="Bd" Background="{TemplateBinding Background}" CornerRadius="14">
+                        <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
+                                          HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <Border Name="Focus" Margin="-2" CornerRadius="16" BorderThickness="2.5"
+                            BorderBrush="{StaticResource YellowBrush}" IsVisible="False" />
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+        <Style Selector="^:pointerover /template/ Border#Bd">
+            <Setter Property="Background" Value="#14FFFFFF" />
+        </Style>
+        <Style Selector="^:checked">
+            <Setter Property="Foreground" Value="{StaticResource BodyBrush}" />
+        </Style>
+        <Style Selector="^:checked /template/ Border#Bd">
+            <Setter Property="Background" Value="White" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#Focus">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+    </ControlTheme>
+
+    <!-- ═════════ Nút trong bảng trượt ═════════ -->
+    <ControlTheme x:Key="PrimaryButton" TargetType="Button">
+        <Setter Property="Height" Value="44" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Background" Value="{StaticResource BodyBrush}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Border Name="Bd" Background="{TemplateBinding Background}" CornerRadius="12" Padding="18,0">
+                        <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
+                                          HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <Border Name="Focus" Margin="-3" CornerRadius="15" BorderThickness="2.5"
+                            BorderBrush="{StaticResource BodyBrush}" IsVisible="False" />
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover /template/ Border#Bd">
+            <Setter Property="Background" Value="{StaticResource BodyDeepBrush}" />
+        </Style>
+        <Style Selector="^:disabled /template/ Border#Bd">
+            <Setter Property="Opacity" Value="0.5" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#Focus">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+    </ControlTheme>
+
+    <ControlTheme x:Key="LineButton" TargetType="Button">
+        <Setter Property="Height" Value="44" />
+        <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+        <Setter Property="Background" Value="White" />
+        <Setter Property="BorderBrush" Value="{StaticResource FieldBorderBrush}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Border Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="1" CornerRadius="12" Padding="16,0">
+                        <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
+                                          HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <Border Name="Focus" Margin="-3" CornerRadius="15" BorderThickness="2.5"
+                            BorderBrush="{StaticResource BodyBrush}" IsVisible="False" />
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+            <Setter Property="Foreground" Value="{StaticResource BodyBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource BodyBrush}" />
+        </Style>
+        <Style Selector="^:disabled /template/ Border#Bd">
+            <Setter Property="Opacity" Value="0.5" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#Focus">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+    </ControlTheme>
+
+    <ControlTheme x:Key="SquareButton" TargetType="Button">
+        <Setter Property="Width" Value="36" />
+        <Setter Property="Height" Value="36" />
+        <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+        <Setter Property="Background" Value="White" />
+        <Setter Property="BorderBrush" Value="{StaticResource FieldBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Border Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10">
+                        <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
+                                          HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <Border Name="Focus" Margin="-3" CornerRadius="13" BorderThickness="2.5"
+                            BorderBrush="{StaticResource BodyBrush}" IsVisible="False" />
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+            <Setter Property="Foreground" Value="{StaticResource BodyBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource BodyBrush}" />
+            <Setter Property="Background" Value="{StaticResource LogBgBrush}" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#Focus">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+    </ControlTheme>
+
+    <!-- ═════════ Dòng công tắc (CheckBox) ═════════ -->
+    <ControlTheme x:Key="SwitchRow" TargetType="CheckBox">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Background="{TemplateBinding Background}" BorderBrush="{StaticResource LineBrush}" BorderThickness="0,1,0,0" Padding="0,12">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
+                                          VerticalAlignment="Center" Margin="0,0,12,0" />
+                        <Border Name="Box" Grid.Column="1" Width="22" Height="22" CornerRadius="6"
+                                BorderBrush="{StaticResource FieldBorderBrush}" BorderThickness="1.5" Background="White">
+                            <Path Name="Check" Data="M5,11.5 L9.5,16 L17,7" Stroke="White" StrokeThickness="2.4"
+                                  StrokeLineCap="Round" StrokeJoin="Round" Margin="-1.5" IsVisible="False" />
+                        </Border>
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover /template/ Border#Box">
+            <Setter Property="BorderBrush" Value="{StaticResource BodyBrush}" />
+        </Style>
+        <Style Selector="^:checked /template/ Border#Box">
+            <Setter Property="Background" Value="{StaticResource BodyBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource BodyBrush}" />
+        </Style>
+        <Style Selector="^:checked /template/ Path#Check">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:focus-visible /template/ Border#Box">
+            <Setter Property="BorderBrush" Value="{StaticResource InkBrush}" />
+            <Setter Property="BorderThickness" Value="2.5" />
+        </Style>
+    </ControlTheme>
+
+    <!-- ═════════ Thanh âm lượng ═════════ -->
+    <ControlTheme x:Key="TrackRepeat" TargetType="RepeatButton">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Rectangle Fill="Transparent" />
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+
+    <ControlTheme x:Key="VolumeSlider" TargetType="Slider">
+        <Setter Property="Minimum" Value="0" />
+        <Setter Property="Maximum" Value="100" />
+        <Setter Property="SmallChange" Value="5" />
+        <Setter Property="LargeChange" Value="10" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid Height="26" Background="Transparent">
+                    <Border Height="8" CornerRadius="4" Background="{StaticResource BodyDeepBrush}" VerticalAlignment="Center" />
+                    <Track Name="PART_Track" Orientation="Horizontal"
+                           Minimum="{TemplateBinding Minimum}" Maximum="{TemplateBinding Maximum}"
+                           Value="{TemplateBinding Value, Mode=TwoWay}" IsDirectionReversed="{TemplateBinding IsDirectionReversed}">
+                        <Track.DecreaseButton>
+                            <RepeatButton Name="PART_DecreaseButton" Theme="{StaticResource TrackRepeat}" />
+                        </Track.DecreaseButton>
+                        <Track.IncreaseButton>
+                            <RepeatButton Name="PART_IncreaseButton" Theme="{StaticResource TrackRepeat}" />
+                        </Track.IncreaseButton>
+                        <Thumb Name="thumb" Width="24" Height="24" BorderBrush="Transparent">
+                            <Thumb.Template>
+                                <ControlTemplate>
+                                    <Panel>
+                                        <Border Margin="-4" CornerRadius="16" BorderThickness="2.5" BorderBrush="{TemplateBinding BorderBrush}" />
+                                        <Border Background="White" CornerRadius="12" BoxShadow="0 2 6 0 #59000000" />
+                                    </Panel>
+                                </ControlTemplate>
+                            </Thumb.Template>
+                        </Thumb>
+                    </Track>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^:focus-visible /template/ Thumb#thumb">
+            <Setter Property="BorderBrush" Value="{StaticResource YellowBrush}" />
+        </Style>
+    </ControlTheme>
+
+    <!-- ═════════ Khung gợi ý (tooltip) ═════════ -->
+    <ControlTheme x:Key="{x:Type ToolTip}" TargetType="ToolTip">
+        <Setter Property="FontFamily" Value="{StaticResource UiFont}" />
+        <Setter Property="FontSize" Value="12.5" />
+        <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+        <Setter Property="Background" Value="White" />
+        <Setter Property="MaxWidth" Value="300" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Background="{TemplateBinding Background}" CornerRadius="12" Padding="12,10" Margin="6,4,6,10"
+                        BoxShadow="0 6 20 0 #4D04281F">
+                    <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}" TextWrapping="Wrap" />
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+
+</ResourceDictionary>

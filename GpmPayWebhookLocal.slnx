@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="README.md" />
+    <File Path="Directory.Build.props" />
+    <File Path=".github/workflows/build.yml" />
+  </Folder>
+  <Folder Name="/scripts/">
+    <File Path="scripts/build-windows.ps1" />
+    <File Path="scripts/build-windows.cmd" />
+    <File Path="scripts/build-macos.sh" />
+    <File Path="scripts/build-linux.sh" />
+  </Folder>
+  <Project Path="GpmPayWebhookLocal/GpmPayWebhookLocal.csproj" />
+</Solution>

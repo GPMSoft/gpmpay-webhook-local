@@ -1,0 +1,334 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="using:GpmPayWebhookLocal.Controls"
+        xmlns:v="using:GpmPayWebhookLocal.Views"
+        x:Class="GpmPayWebhookLocal.Views.MainWindow"
+        Title="GPMPay Webhook Local" Width="380" Height="660"
+        Icon="/Assets/app.ico"
+        WindowDecorations="None" CanResize="False"
+        TransparencyLevelHint="Transparent" Background="Transparent"
+        WindowStartupLocation="CenterScreen" UseLayoutRounding="True"
+        FontFamily="{StaticResource UiFont}" Foreground="White">
+
+    <Border Name="RootBody" Background="{StaticResource BodyBrush}" CornerRadius="22" ClipToBounds="True">
+        <Grid RowDefinitions="52,Auto,*,Auto,76">
+
+            <!-- ───────── Thanh trên ───────── -->
+            <Grid Grid.Row="0" Margin="18,0,8,0">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Panel Width="18" Height="18" VerticalAlignment="Center">
+                        <Ellipse Name="LedHalo" Width="16" Height="16" Opacity="0.25" />
+                        <Ellipse Name="Led" Width="10" Height="10" />
+                    </Panel>
+                    <TextBlock Name="TopStatus" Text="Đã dừng" FontSize="14" FontWeight="SemiBold" Margin="8,0,0,0" VerticalAlignment="Center" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <TextBlock FontSize="14" FontWeight="ExtraBold" VerticalAlignment="Center" Margin="0,0,6,0">
+                        <Run Text="GPM" /><Run Text="Pay" Foreground="{StaticResource MintBrush}" />
+                    </TextBlock>
+                    <Button Theme="{StaticResource IconButton}" Click="Hide_Click"
+                            ToolTip.Tip="Ẩn xuống khay — app vẫn chạy nền" AutomationProperties.Name="Ẩn xuống khay">
+                        <c:StrokeIcon Data="{StaticResource IcClose}" Width="18" Height="18" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <!-- ───────── Màn hình số tiền ───────── -->
+            <Border Grid.Row="1" Margin="14,0" Background="White" CornerRadius="18" Padding="18,16,18,14"
+                    BoxShadow="{StaticResource CardShadow}">
+                <StackPanel TextElement.Foreground="{StaticResource InkBrush}">
+                    <DockPanel>
+                        <TextBlock Name="DispTime" Classes="num" DockPanel.Dock="Right" FontSize="13"
+                                   Foreground="{StaticResource Ink2Brush}" VerticalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal">
+                            <Border Name="DispChip" Background="{StaticResource ChipBrush}" CornerRadius="6" Padding="8,2" Margin="0,0,8,0">
+                                <TextBlock Name="DispGateway" FontSize="13" FontWeight="Bold" Foreground="{StaticResource BodyDeepBrush}" />
+                            </Border>
+                            <TextBlock Name="DispKind" FontSize="13" Foreground="{StaticResource Ink2Brush}" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </DockPanel>
+                    <Viewbox Height="56" Margin="0,8,0,0" HorizontalAlignment="Left" StretchDirection="DownOnly" Stretch="Uniform">
+                        <StackPanel Name="DispAmountPanel" Orientation="Horizontal">
+                            <StackPanel.RenderTransform>
+                                <TranslateTransform />
+                            </StackPanel.RenderTransform>
+                            <TextBlock Name="DispAmount" Classes="num" Text="0" FontSize="50" FontWeight="ExtraBold" />
+                            <TextBlock Name="DispCurrency" Text="₫" FontSize="26" FontWeight="Bold" Foreground="{StaticResource BodyBrush}"
+                                       VerticalAlignment="Bottom" Margin="6,0,0,8" />
+                        </StackPanel>
+                    </Viewbox>
+                    <TextBlock Name="DispContent" Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource Ink2Brush}" TextTrimming="CharacterEllipsis" />
+                    <Rectangle Height="1" Margin="0,12,0,0" Stroke="{StaticResource FieldBorderBrush}" StrokeThickness="1" StrokeDashArray="4,3" />
+                    <DockPanel Margin="0,10,0,0">
+                        <TextBlock Name="DispTodaySum" Classes="num" DockPanel.Dock="Right" FontSize="13" FontWeight="Bold" />
+                        <TextBlock Name="DispTodayCount" FontSize="13" Foreground="{StaticResource Ink2Brush}" />
+                    </DockPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- ───────── Lưới loa ───────── -->
+            <c:SpeakerGrille Name="Grille" Grid.Row="2" Margin="24,12,24,4" VerticalAlignment="Center" IsHitTestVisible="False" />
+
+            <!-- ───────── Điều khiển ───────── -->
+            <StackPanel Grid.Row="3" Margin="18,6,18,14">
+                <Grid ColumnDefinitions="Auto,Auto,*">
+                    <Button Name="BtnPower" Theme="{StaticResource RoundButton}" Click="Power_Click">
+                        <c:StrokeIcon Data="{StaticResource IcPower}" />
+                    </Button>
+                    <Button Name="BtnMute" Grid.Column="1" Theme="{StaticResource RoundButton}" Margin="14,0,0,0" Click="Mute_Click">
+                        <c:StrokeIcon Name="MuteIcon" Data="{StaticResource IcVolume}" />
+                    </Button>
+                    <StackPanel Grid.Column="2" Margin="14,0,0,0" VerticalAlignment="Center">
+                        <DockPanel Margin="0,0,0,4">
+                            <TextBlock Name="VolumeText" Classes="num" DockPanel.Dock="Right" FontSize="13" FontWeight="Bold" />
+                            <TextBlock Text="Âm lượng" FontSize="13" FontWeight="Medium" Foreground="{StaticResource OnBody2Brush}" />
+                        </DockPanel>
+                        <Slider Name="VolumeSlider" Theme="{StaticResource VolumeSlider}" AutomationProperties.Name="Âm lượng" />
+                    </StackPanel>
+                </Grid>
+                <DockPanel Margin="0,12,0,0">
+                    <Button DockPanel.Dock="Right" Theme="{StaticResource GhostButton}" Click="TestSpeak_Click" Margin="12,0,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <c:StrokeIcon Data="{StaticResource IcPlay}" Width="16" Height="16" Margin="0,0,6,0" />
+                            <TextBlock Text="Đọc thử" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Name="VoiceWarn" Background="Transparent" Margin="0,0,8,0" Focusable="True" Cursor="Help"
+                                ToolTip.ShowDelay="150" ToolTip.Placement="Top" AutomationProperties.Name="Cảnh báo giọng đọc">
+                            <c:StrokeIcon Data="{StaticResource IcWarning}" Width="20" Height="20" TextElement.Foreground="{StaticResource YellowBrush}" />
+                            <ToolTip.Tip>
+                                <TextBlock TextWrapping="Wrap">
+                                    <Bold><Run Name="VoiceWarnTitle" /></Bold>
+                                    <Run Name="VoiceWarnBody" />
+                                </TextBlock>
+                            </ToolTip.Tip>
+                        </Border>
+                        <TextBlock FontSize="13" Foreground="{StaticResource OnBody2Brush}" VerticalAlignment="Center" Text="Giọng đọc: " />
+                        <TextBlock Name="VoiceName" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
+                </DockPanel>
+            </StackPanel>
+
+            <!-- ───────── Thanh đáy ───────── -->
+            <Border Grid.Row="4" Background="{StaticResource BodyDeepBrush}" Padding="7,10">
+                <UniformGrid Columns="4">
+                    <ToggleButton Name="TabConfig" Theme="{StaticResource DockButton}" Click="Tab_Click" Tag="config">
+                        <StackPanel>
+                            <c:StrokeIcon Data="{StaticResource IcSliders}" HorizontalAlignment="Center" />
+                            <TextBlock Text="Cấu hình" Margin="0,4,0,0" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </ToggleButton>
+                    <ToggleButton Name="TabStatus" Theme="{StaticResource DockButton}" Click="Tab_Click" Tag="status">
+                        <StackPanel>
+                            <c:StrokeIcon Data="{StaticResource IcActivity}" HorizontalAlignment="Center" />
+                            <TextBlock Text="Trạng thái" Margin="0,4,0,0" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </ToggleButton>
+                    <ToggleButton Name="TabTx" Theme="{StaticResource DockButton}" Click="Tab_Click" Tag="tx">
+                        <StackPanel>
+                            <c:StrokeIcon Data="{StaticResource IcReceipt}" HorizontalAlignment="Center" />
+                            <TextBlock Text="Giao dịch" Margin="0,4,0,0" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </ToggleButton>
+                    <ToggleButton Name="TabLog" Theme="{StaticResource DockButton}" Click="Tab_Click" Tag="log">
+                        <StackPanel>
+                            <c:StrokeIcon Data="{StaticResource IcTerminal}" HorizontalAlignment="Center" />
+                            <TextBlock Text="Nhật ký" Margin="0,4,0,0" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </ToggleButton>
+                </UniformGrid>
+            </Border>
+
+            <!-- ═════════ Bảng trượt ═════════ -->
+            <Panel Grid.Row="0" Grid.RowSpan="5" Margin="10,52,10,82" TextElement.Foreground="{StaticResource InkBrush}">
+
+                <!-- Cấu hình -->
+                <Border Name="SheetConfig" Classes="sheet">
+                    <Grid RowDefinitions="Auto,*,Auto">
+                        <DockPanel Margin="18,12,10,6">
+                            <Button DockPanel.Dock="Right" Theme="{StaticResource SquareButton}" BorderThickness="0" Click="CloseSheet_Click" AutomationProperties.Name="Đóng">
+                                <c:StrokeIcon Data="{StaticResource IcClose}" Width="18" Height="18" />
+                            </Button>
+                            <TextBlock Classes="sheet-title" Text="Cấu hình" />
+                        </DockPanel>
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="18,4,18,12">
+                            <StackPanel>
+                                <TextBlock Classes="label" Text="API Token" />
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBox Name="TokenBox" Classes="field" PasswordChar="●" AutomationProperties.Name="API Token" />
+                                    <Button Name="BtnEye" Grid.Column="1" Theme="{StaticResource SquareButton}" Width="42" Height="42" Margin="8,0,0,0"
+                                            Click="ToggleToken_Click" ToolTip.Tip="Hiện token" AutomationProperties.Name="Hiện token">
+                                        <c:StrokeIcon Data="{StaticResource IcEye}" Width="18" Height="18" />
+                                    </Button>
+                                </Grid>
+                                <TextBlock Text="Tạo ở GPM Pay → Tích hợp → API Tokens, cần quyền webhooks:manage." FontSize="12"
+                                           Foreground="{StaticResource Ink2Brush}" TextWrapping="Wrap" Margin="0,6,0,0" />
+                                <Grid Margin="0,14,0,0" ColumnDefinitions="*,12,*">
+                                    <StackPanel>
+                                        <TextBlock Classes="label" Text="Port nội bộ" />
+                                        <TextBox Name="PortBox" Classes="field" AutomationProperties.Name="Port nội bộ" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Classes="label" Text="Giọng đọc" />
+                                        <ComboBox Name="EngineBox" Classes="field" AutomationProperties.Name="Giọng đọc">
+                                            <ComboBoxItem Content="Tự động" Tag="Auto" />
+                                            <ComboBoxItem Name="EngineSystemItem" Content="Hệ thống" Tag="System" />
+                                            <ComboBoxItem Content="eSpeak NG" Tag="Espeak" />
+                                        </ComboBox>
+                                    </StackPanel>
+                                </Grid>
+                                <StackPanel Margin="0,14,0,0">
+                                    <CheckBox Name="ChkSimulated" Theme="{StaticResource SwitchRow}" Content="Đọc cả giao dịch giả lập" Click="Option_Changed" />
+                                    <CheckBox Name="ChkAutoRun" Theme="{StaticResource SwitchRow}" Content="Tự chạy khi mở ứng dụng" Click="Option_Changed" />
+                                    <CheckBox Name="ChkStartup" Theme="{StaticResource SwitchRow}" Click="Option_Changed">
+                                        <TextBlock Name="StartupLabel" Text="Khởi động cùng hệ thống, chạy ẩn dưới khay" TextWrapping="Wrap" />
+                                    </CheckBox>
+                                </StackPanel>
+                                <TextBlock Name="ConfigError" Foreground="{StaticResource ErrorBrush}" FontSize="13" FontWeight="SemiBold"
+                                           TextWrapping="Wrap" Margin="0,10,0,0" IsVisible="False" />
+                            </StackPanel>
+                        </ScrollViewer>
+                        <Border Grid.Row="2" BorderBrush="{StaticResource LineBrush}" BorderThickness="0,1,0,0" Padding="18,12,18,16">
+                            <Button Name="BtnSave" Theme="{StaticResource PrimaryButton}" HorizontalAlignment="Right" Content="Lưu cấu hình" Click="Save_Click" />
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- Trạng thái -->
+                <Border Name="SheetStatus" Classes="sheet">
+                    <Grid RowDefinitions="Auto,*,Auto">
+                        <DockPanel Margin="18,12,10,6">
+                            <Button DockPanel.Dock="Right" Theme="{StaticResource SquareButton}" BorderThickness="0" Click="CloseSheet_Click" AutomationProperties.Name="Đóng">
+                                <c:StrokeIcon Data="{StaticResource IcClose}" Width="18" Height="18" />
+                            </Button>
+                            <TextBlock Classes="sheet-title" Text="Trạng thái" />
+                        </DockPanel>
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="18,4,18,12">
+                            <StackPanel>
+                                <Border Name="StatusPill" CornerRadius="12" Padding="14,12">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <Ellipse Name="PillLed" Width="10" Height="10" VerticalAlignment="Center" />
+                                        <TextBlock Name="StatusFull" Grid.Column="1" Margin="10,0,0,0" FontSize="14" FontWeight="SemiBold" TextWrapping="Wrap" />
+                                    </Grid>
+                                </Border>
+                                <TextBlock Classes="label" Text="URL webhook" Margin="0,14,0,6" />
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Name="UrlText" Text="—" FontSize="13" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                                    <Button Name="BtnCopyUrl" Grid.Column="1" Theme="{StaticResource SquareButton}" Margin="8,0,0,0"
+                                            Click="CopyUrl_Click" ToolTip.Tip="Copy URL webhook" AutomationProperties.Name="Copy URL webhook">
+                                        <c:StrokeIcon Data="{StaticResource IcCopy}" Width="18" Height="18" />
+                                    </Button>
+                                </Grid>
+                                <StackPanel Margin="0,12,0,0">
+                                    <Border Classes="kv">
+                                        <DockPanel>
+                                            <TextBlock Name="WebhookIdText" Classes="num" DockPanel.Dock="Right" Text="—" FontSize="14" Margin="12,0,0,0" />
+                                            <TextBlock Text="Webhook ID" FontSize="14" Foreground="{StaticResource Ink2Brush}" />
+                                        </DockPanel>
+                                    </Border>
+                                    <Border Classes="kv">
+                                        <DockPanel>
+                                            <TextBlock Name="HealthText" Classes="num" DockPanel.Dock="Right" Text="—" FontSize="14" Margin="12,0,0,0" />
+                                            <TextBlock Text="Kiểm tra tunnel" FontSize="14" Foreground="{StaticResource Ink2Brush}" />
+                                        </DockPanel>
+                                    </Border>
+                                    <Border Classes="kv">
+                                        <DockPanel>
+                                            <TextBlock Name="UptimeText" Classes="num" DockPanel.Dock="Right" Text="—" FontSize="14" Margin="12,0,0,0" />
+                                            <TextBlock Text="Chạy được" FontSize="14" Foreground="{StaticResource Ink2Brush}" />
+                                        </DockPanel>
+                                    </Border>
+                                    <Border Classes="kv">
+                                        <DockPanel>
+                                            <TextBlock Name="PortText" Classes="num" DockPanel.Dock="Right" FontSize="14" Margin="12,0,0,0" />
+                                            <TextBlock Text="Port nội bộ" FontSize="14" Foreground="{StaticResource Ink2Brush}" />
+                                        </DockPanel>
+                                    </Border>
+                                </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <Border Grid.Row="2" BorderBrush="{StaticResource LineBrush}" BorderThickness="0,1,0,0" Padding="18,12,18,16">
+                            <Button Name="BtnRecreate" Theme="{StaticResource LineButton}" HorizontalAlignment="Stretch" Click="Recreate_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <c:StrokeIcon Data="{StaticResource IcRefresh}" Width="18" Height="18" Margin="0,0,8,0" />
+                                    <TextBlock Text="Tạo lại URL" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- Giao dịch -->
+                <Border Name="SheetTx" Classes="sheet">
+                    <Grid RowDefinitions="Auto,*,Auto">
+                        <DockPanel Margin="18,12,10,6">
+                            <Button DockPanel.Dock="Right" Theme="{StaticResource SquareButton}" BorderThickness="0" Click="CloseSheet_Click" AutomationProperties.Name="Đóng">
+                                <c:StrokeIcon Data="{StaticResource IcClose}" Width="18" Height="18" />
+                            </Button>
+                            <TextBlock Classes="sheet-title" Text="Giao dịch" />
+                        </DockPanel>
+                        <TextBlock Name="TxEmpty" Grid.Row="1" Text="Chưa có giao dịch nào." FontSize="14" Foreground="{StaticResource Ink2Brush}"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="18,0,18,8">
+                            <ItemsControl Name="TxList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="v:TxRow">
+                                        <Border BorderBrush="{StaticResource LineBrush}" BorderThickness="0,1,0,0" Padding="0,12">
+                                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                                                <TextBlock Text="{Binding Content}" FontSize="14" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Grid.Column="1" Classes="num" Text="{Binding Amount}" Foreground="{Binding AmountBrush}"
+                                                           FontSize="16" FontWeight="ExtraBold" Margin="12,0,0,0" HorizontalAlignment="Right" />
+                                                <TextBlock Grid.Row="1" Classes="num" Text="{Binding Meta}" FontSize="12.5"
+                                                           Foreground="{StaticResource Ink2Brush}" Margin="0,2,0,0" />
+                                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Source}" FontSize="12.5"
+                                                           Foreground="{StaticResource Ink2Brush}" Margin="0,2,0,0" HorizontalAlignment="Right" />
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                        <Border Grid.Row="2" BorderBrush="{StaticResource LineBrush}" BorderThickness="0,1,0,0" Padding="18,12,18,16">
+                            <DockPanel>
+                                <TextBlock Name="TxTodaySum" Classes="num" DockPanel.Dock="Right" FontSize="14" FontWeight="ExtraBold"
+                                           Foreground="{StaticResource BodyBrush}" />
+                                <TextBlock Name="TxTodayCount" FontSize="14" Foreground="{StaticResource Ink2Brush}" />
+                            </DockPanel>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- Nhật ký -->
+                <Border Name="SheetLog" Classes="sheet">
+                    <Grid RowDefinitions="Auto,*,Auto">
+                        <DockPanel Margin="18,12,10,6">
+                            <Button DockPanel.Dock="Right" Theme="{StaticResource SquareButton}" BorderThickness="0" Click="CloseSheet_Click" AutomationProperties.Name="Đóng">
+                                <c:StrokeIcon Data="{StaticResource IcClose}" Width="18" Height="18" />
+                            </Button>
+                            <TextBlock Classes="sheet-title" Text="Nhật ký" />
+                        </DockPanel>
+                        <Border Grid.Row="1" Background="{StaticResource LogBgBrush}" CornerRadius="12" Margin="10,0">
+                            <ScrollViewer Name="LogScroll" VerticalScrollBarVisibility="Auto" Padding="12,10">
+                                <ItemsControl Name="LogList" FontFamily="{StaticResource MonoFont}" FontSize="12">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="v:LogLine">
+                                            <Grid ColumnDefinitions="64,*" Margin="0,1">
+                                                <TextBlock Text="{Binding Time}" Foreground="{StaticResource Ink2Brush}" />
+                                                <SelectableTextBlock Grid.Column="1" Text="{Binding Text}" Foreground="{Binding Brush}" TextWrapping="Wrap" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Border>
+                        <Border Grid.Row="2" Padding="18,12,18,16">
+                            <Button Name="BtnCopyLog" Theme="{StaticResource LineButton}" HorizontalAlignment="Right" Content="Copy nhật ký" Click="CopyLog_Click" />
+                        </Border>
+                    </Grid>
+                </Border>
+            </Panel>
+        </Grid>
+    </Border>
+
+</Window>

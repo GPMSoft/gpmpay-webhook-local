@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <!--
+      Windows: dùng TFM -windows để có WinRT (giọng đọc Microsoft An, MediaPlayer, toast).
+      macOS / Linux: net10.0 thuần.
+      Chọn theo RID đích (-r win-x64 / osx-arm64 / linux-x64...), không có RID thì theo máy đang build.
+      Lưu ý: Native AOT không biên dịch chéo hệ điều hành → bản AOT của OS nào phải build trên OS đó.
+    -->
+    <_GpmTargetsWindows Condition="'$(RuntimeIdentifier)' != ''">$(RuntimeIdentifier.StartsWith('win'))</_GpmTargetsWindows>
+    <_GpmTargetsWindows Condition="'$(RuntimeIdentifier)' == ''">$([MSBuild]::IsOSPlatform('Windows'))</_GpmTargetsWindows>
+    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework Condition="'$(_GpmTargetsWindows)' == 'true'">net10.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatformVersion Condition="$(TargetFramework.Contains('-windows'))">10.0.17763.0</SupportedOSPlatformVersion>
+
+    <RootNamespace>GpmPayWebhookLocal</RootNamespace>
+    <AssemblyName>GpmPayWebhookLocal</AssemblyName>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <BuiltInComInteropSupport>false</BuiltInComInteropSupport>
+
+    <!-- Native AOT: publish ra 1 file chạy ngay, không cần cài .NET -->
+    <PublishAot>true</PublishAot>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <EventSourceSupport>false</EventSourceSupport>
+    <DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.1.5" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.5" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.5" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.14"
+                      Condition="$(TargetFramework.Contains('-windows'))" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Kestrel để nhận webhook (không bị lỗi Host header như HttpListener khi đi qua tunnel) -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Font Be Vietnam Pro (SIL OFL 1.1) và icon app nhúng vào app -->
+    <AvaloniaResource Include="Assets\**" Exclude="Assets\Fonts\OFL.txt" />
+    <None Include="Assets\Fonts\OFL.txt" Link="licenses\BeVietnamPro-OFL.txt"
+          CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <!--
+    Từ .NET SDK 11, "dotnet publish" chạy SplitResourcesByCulture trước ResolveReferences, tức là trước khi
+    Avalonia (target AddAvaloniaResources) kịp thêm "!AvaloniaResources" → XAML không được nhúng/biên dịch và app
+    publish ra báo "No precompiled XAML found". Bắt Avalonia đăng ký resource sớm hơn để build đúng với mọi SDK.
+  -->
+  <Target Name="_GpmAddAvaloniaResourcesEarly" BeforeTargets="AssignTargetPaths;SplitResourcesByCulture"
+          DependsOnTargets="AddAvaloniaResources" />
+
+</Project>

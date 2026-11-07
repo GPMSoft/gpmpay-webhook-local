@@ -1,0 +1,61 @@
+# Native AOT không biên dịch chéo hệ điều hành → mỗi OS build trên runner của chính nó.
+# Chạy tay (Actions → Build → Run workflow) hoặc tự chạy khi đẩy tag v*.
+name: Build
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: windows-x64
+            os: windows-latest
+            run: ./scripts/build-windows.ps1 -Arch x64
+            shell: pwsh
+            artifact: artifacts/GpmPayWebhookLocal-win-x64.zip
+          - name: macos-universal
+            os: macos-latest
+            run: ./scripts/build-macos.sh universal
+            shell: bash
+            artifact: artifacts/GpmPayWebhookLocal-macos-universal.zip
+          - name: linux-x64
+            os: ubuntu-latest
+            run: ./scripts/build-linux.sh x64
+            shell: bash
+            artifact: artifacts/GpmPayWebhookLocal-linux-x64.tar.gz
+          - name: linux-arm64
+            os: ubuntu-24.04-arm
+            run: ./scripts/build-linux.sh arm64
+            shell: bash
+            artifact: artifacts/GpmPayWebhookLocal-linux-arm64.tar.gz
+
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Cài clang + zlib (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y clang zlib1g-dev
+
+      - name: Cấp quyền chạy script
+        if: runner.os != 'Windows'
+        run: chmod +x scripts/*.sh
+
+      - name: Build Native AOT
+        shell: ${{ matrix.shell }}
+        run: ${{ matrix.run }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GpmPayWebhookLocal-${{ matrix.name }}
+          path: ${{ matrix.artifact }}
