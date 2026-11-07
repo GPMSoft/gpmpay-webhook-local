@@ -3,6 +3,12 @@
 App desktop đa nền tảng (**Windows · macOS · Linux**) nhận webhook giao dịch GPM Pay ngay trên máy tính và đọc số tiền qua loa.
 Viết bằng **Avalonia 12 + .NET 10**, build **Native AOT** → 1 file chạy ngay, không cần cài .NET.
 
+![Chạy trên Windows, macOS và Ubuntu](docs/screenshots/multi-platform.png)
+
+Các màn hình: chính · Cấu hình · Trạng thái · Giao dịch · Nhật ký
+
+![Các màn hình của app](docs/screenshots/all.png)
+
 ## Cấu trúc
 
 ```
