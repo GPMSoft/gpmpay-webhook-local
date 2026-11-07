@@ -5,11 +5,13 @@ namespace GpmPayWebhookLocal.Services;
 
 public enum VoiceEngine
 {
-    /// <summary>Giọng hệ điều hành nếu có tiếng Việt, không thì eSpeak NG.</summary>
+    /// <summary>Giọng tiếng Việt của hệ điều hành nếu có, không thì giọng "Có sẵn".</summary>
     Auto,
     /// <summary>Giọng hệ điều hành (Windows: Microsoft An · macOS: Linh · Linux: Speech Dispatcher).</summary>
     System,
     Espeak,
+    /// <summary>Ghép các đoạn âm thanh nhúng trong app — không phụ thuộc hệ điều hành.</summary>
+    Builtin,
 }
 
 /// <summary>Giọng đọc có sẵn của hệ điều hành.</summary>
@@ -59,19 +61,22 @@ public sealed class SpeechService : IDisposable
     }
 
     /// <summary>Engine thực sự dùng sau khi xét chế độ Tự động.</summary>
+    // Tự động: giọng tiếng Việt của hệ điều hành (tự nhiên nhất) nếu có, không thì giọng "Có sẵn".
     public VoiceEngine EffectiveEngine => Engine switch
     {
-        VoiceEngine.Auto when _system.HasVietnamese => VoiceEngine.System,
-        // Windows tự tải được eSpeak NG; macOS/Linux chỉ dùng khi đã cài, không thì đành giọng hệ thống
-        VoiceEngine.Auto => OperatingSystem.IsWindows() || EspeakNg.IsInstalled || !_system.IsAvailable
-            ? VoiceEngine.Espeak : VoiceEngine.System,
+        VoiceEngine.Auto => _system.HasVietnamese ? VoiceEngine.System : VoiceEngine.Builtin,
         _ => Engine,
     };
+
+    /// <summary>Dùng khi giọng "Có sẵn" không ghép được câu (có từ ngoài bộ âm thanh).</summary>
+    private VoiceEngine FallbackEngine =>
+        _system.HasVietnamese || (!OperatingSystem.IsWindows() && !EspeakNg.IsInstalled) ? VoiceEngine.System : VoiceEngine.Espeak;
 
     /// <summary>Mô tả ngắn engine đang dùng, hiện cạnh "Giọng đọc:".</summary>
     public string Describe() => Engine switch
     {
-        VoiceEngine.Auto => $"Tự động ({(EffectiveEngine == VoiceEngine.System ? _system.Label : "eSpeak NG")})",
+        VoiceEngine.Auto => $"Tự động ({(EffectiveEngine == VoiceEngine.System ? _system.Label : "Có sẵn")})",
+        VoiceEngine.Builtin => "Có sẵn",
         VoiceEngine.System => _system.Label,
         _ => EspeakNg.IsInstalled ? "eSpeak NG" : OperatingSystem.IsWindows() ? "eSpeak NG (đang tải…)" : "eSpeak NG (chưa cài)",
     };
@@ -86,13 +91,13 @@ public sealed class SpeechService : IDisposable
                     ? "Cài bằng Homebrew: brew install espeak-ng — hoặc dùng giọng macOS (Linh)."
                     : "Cài bằng: sudo apt install espeak-ng (Fedora: dnf, Arch: pacman).");
 
-            if (Engine != VoiceEngine.Auto || _system.HasVietnamese || OperatingSystem.IsLinux()) return null;
+            if (Engine != VoiceEngine.System || _system.HasVietnamese || OperatingSystem.IsLinux()) return null;
 
             return OperatingSystem.IsWindows()
                 ? new("Windows chưa có giọng tiếng Việt.",
-                    "Đang dùng eSpeak NG (giọng máy). Để có giọng tự nhiên hơn, cài Microsoft An: Settings → Time & language → Speech → Add voices → Tiếng Việt.")
+                    "Chọn giọng \"Có sẵn\", hoặc cài Microsoft An: Settings → Time & language → Speech → Add voices → Tiếng Việt.")
                 : new("macOS chưa có giọng tiếng Việt.",
-                    "Để có giọng tự nhiên, tải giọng Linh: System Settings → Accessibility → Spoken Content → System voice → Manage Voices… → Tiếng Việt.");
+                    "Chọn giọng \"Có sẵn\", hoặc tải giọng Linh: System Settings → Accessibility → Spoken Content → System voice → Manage Voices… → Tiếng Việt.");
         }
     }
 
@@ -114,7 +119,19 @@ public sealed class SpeechService : IDisposable
             {
                 try
                 {
-                    if (EffectiveEngine == VoiceEngine.Espeak)
+                    var engine = EffectiveEngine;
+                    if (engine == VoiceEngine.Builtin)
+                    {
+                        if (BuiltinVoice.TrySynthesize(text) is { } clip)
+                        {
+                            SpeakingChanged?.Invoke(true);
+                            await _player.PlayAsync(clip, Math.Clamp(Volume, 0, 1), _cts.Token);
+                            continue;
+                        }
+                        engine = FallbackEngine;
+                    }
+
+                    if (engine == VoiceEngine.Espeak)
                     {
                         await EspeakNg.EnsureAsync(_log, _cts.Token);
                         var wav = await EspeakNg.SynthesizeAsync(text, EspeakSpeed, _cts.Token);

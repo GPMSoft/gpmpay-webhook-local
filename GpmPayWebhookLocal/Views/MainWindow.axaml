@@ -173,6 +173,7 @@
                                         <TextBlock Classes="label" Text="Giọng đọc" />
                                         <ComboBox Name="EngineBox" Classes="field" AutomationProperties.Name="Giọng đọc">
                                             <ComboBoxItem Content="Tự động" Tag="Auto" />
+                                            <ComboBoxItem Content="Có sẵn" Tag="Builtin" />
                                             <ComboBoxItem Name="EngineSystemItem" Content="Hệ thống" Tag="System" />
                                             <ComboBoxItem Content="eSpeak NG" Tag="Espeak" />
                                         </ComboBox>

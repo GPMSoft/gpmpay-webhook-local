@@ -44,7 +44,9 @@
 
   <ItemGroup>
     <!-- Font Be Vietnam Pro (SIL OFL 1.1) và icon app nhúng vào app -->
-    <AvaloniaResource Include="Assets\**" Exclude="Assets\Fonts\OFL.txt" />
+    <AvaloniaResource Include="Assets\**" Exclude="Assets\Fonts\OFL.txt;Assets\Voice\**" />
+    <!-- Giọng "Có sẵn": nhúng thẳng vào assembly, đọc bằng GetManifestResourceStream (không cần Avalonia) -->
+    <EmbeddedResource Include="Assets\Voice\*.wav;Assets\Voice\voice.txt" LogicalName="Voice.%(Filename)%(Extension)" />
     <None Include="Assets\Fonts\OFL.txt" Link="licenses\BeVietnamPro-OFL.txt"
           CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>

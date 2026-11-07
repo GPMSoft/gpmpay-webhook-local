@@ -11,5 +11,8 @@
     <File Path="scripts/build-macos.sh" />
     <File Path="scripts/build-linux.sh" />
   </Folder>
+  <Folder Name="/tools/">
+    <File Path="tools/generate-voice.cs" />
+  </Folder>
   <Project Path="GpmPayWebhookLocal/GpmPayWebhookLocal.csproj" />
 </Solution>

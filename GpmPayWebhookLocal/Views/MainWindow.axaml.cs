@@ -10,6 +10,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using GpmPayWebhookLocal.Controls;
 using GpmPayWebhookLocal.Platform;
 using GpmPayWebhookLocal.Services;
@@ -375,7 +376,20 @@ public partial class MainWindow : Window
 
     private void Body_PointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed) BeginMoveDrag(e);
+        if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed || IsInteractive(e.Source as Visual)) return;
+        BeginMoveDrag(e);
+    }
+
+    /// <summary>
+    /// Click vào control tương tác thì không kéo cửa sổ. Một số control (ComboBox mở popup khi nhả chuột,
+    /// ScrollBar, Slider…) không đánh dấu PointerPressed là đã xử lý, nên BeginMoveDrag sẽ "nuốt" mất cú click.
+    /// </summary>
+    private bool IsInteractive(Visual? v)
+    {
+        for (; v != null && v != RootBody; v = v.GetVisualParent())
+            if (v is ComboBox or TextBox or Button or Slider or ScrollBar or ListBoxItem or SelectableTextBlock)
+                return true;
+        return false;
     }
 
     // ═════════ Chạy / dừng ═════════

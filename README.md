@@ -51,7 +51,13 @@ Biến môi trường `GPMPAY_LOCAL_DATA_DIR` đổi thư mục dữ liệu (ti�
 
 ### Giọng đọc tiếng Việt
 Chọn trong **Cấu hình → Giọng đọc**:
-- **Tự động** (mặc định): dùng giọng hệ điều hành nếu có tiếng Việt, không thì eSpeak NG.
+- **Tự động** (mặc định): giọng tiếng Việt của hệ điều hành nếu có (tự nhiên nhất), không thì **Có sẵn**.
+- **Có sẵn**: ghép 125 cụm âm thanh nhúng trong app (`Assets/Voice`, ~1,7MB) thành câu "Đã nhận … đồng".
+  Không cần cài gì, giọng giống nhau trên mọi hệ điều hành; câu khác số tiền thì tự chuyển sang giọng hệ điều hành / eSpeak NG.
+  - Cụm lớn (cả số 1–99, "X trăm", "linh Y", "nghìn"…), cắt ra từ câu nói liền để giữ ngữ điệu:
+    "Đã nhận | một triệu | hai trăm | năm mươi | nghìn | đồng".
+  - Bộ âm thanh hiện tại tạo bằng giọng Microsoft An: `dotnet run tools/generate-voice.cs` (chạy trên Windows có giọng tiếng Việt).
+  - Muốn đổi giọng: thay các file WAV (PCM 16-bit mono 16 kHz, cùng tên; danh sách cụm trong `voice.txt`).
 - **Windows / macOS / Speech Dispatcher**: giọng hệ điều hành.
   - Windows: Settings → Time & language → Speech → Add voices → Tiếng Việt (Microsoft An).
   - macOS: System Settings → Accessibility → Spoken Content → System voice → Manage Voices… → Tiếng Việt (Linh).
@@ -86,4 +92,6 @@ Linux: giải nén rồi chạy `./GpmPayWebhookLocal`, hoặc `./install.sh` đ
 - **Avalonia** — MIT.
 - **eSpeak NG** — GPL-3.0. Không đóng gói kèm app; Windows tải bản phát hành chính thức lúc chạy, macOS/Linux dùng bản người dùng tự cài; app gọi `espeak-ng` như một chương trình riêng.
 - **cloudflared** — Apache-2.0. Tải lúc chạy từ GitHub releases của Cloudflare (hoặc dùng bản có sẵn trên máy).
+- **Giọng "Có sẵn"** (`Assets/Voice`) — hiện tạo từ giọng Microsoft An của Windows để dùng thử.
+  Trước khi phát hành rộng, cần kiểm tra điều khoản phân phối lại âm thanh của giọng đó, hoặc thay bằng giọng có giấy phép rõ ràng.
 - **Be Vietnam Pro** — SIL Open Font License 1.1. Nhúng trong app (`Assets/Fonts`), giấy phép kèm theo ở `licenses/BeVietnamPro-OFL.txt`.

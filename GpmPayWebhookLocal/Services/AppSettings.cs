@@ -53,6 +53,7 @@ public sealed class AppSettings
         {
             "System" or "Windows" => VoiceEngine.System,
             "Espeak" => VoiceEngine.Espeak,
+            "Builtin" => VoiceEngine.Builtin,
             _ => VoiceEngine.Auto,
         };
         set => VoiceEngineName = value.ToString();
