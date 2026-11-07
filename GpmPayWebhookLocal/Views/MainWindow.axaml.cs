@@ -125,6 +125,9 @@ public partial class MainWindow : Window
         };
 
         if (!startMinimized) Show();
+        // khởi động cùng máy (chạy ẩn) → không hiện trên Dock. Post để chạy sau khi Avalonia khởi tạo NSApplication
+        // xong (lúc đó Avalonia tự đặt chế độ Dock mặc định, gọi sớm hơn sẽ bị ghi đè).
+        else Dispatcher.UIThread.Post(() => { if (!IsVisible) MacDock.SetVisible(false); }, DispatcherPriority.Background);
         AddLog("Ứng dụng đã khởi động.");
 
         if (settings.AutoRun && !string.IsNullOrWhiteSpace(settings.ApiToken))
@@ -335,6 +338,7 @@ public partial class MainWindow : Window
     public void ShowFromTray()
     {
         if (IsExiting) return;
+        MacDock.SetVisible(true);
         Show();
         if (WindowState == WindowState.Minimized) WindowState = WindowState.Normal;
         Activate();
@@ -345,6 +349,7 @@ public partial class MainWindow : Window
     private void HideToTray()
     {
         Hide();
+        MacDock.SetVisible(false); // macOS: bỏ icon khỏi Dock, chỉ còn trên menu bar (như khay của Windows / Ubuntu)
         if (!_trayHintShown)
         {
             _trayHintShown = true;
