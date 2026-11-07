@@ -52,8 +52,7 @@ public sealed class AppSettings
         get => VoiceEngineName switch
         {
             "System" or "Windows" => VoiceEngine.System,
-            "Espeak" => VoiceEngine.Espeak,
-            "Builtin" => VoiceEngine.Builtin,
+            "Builtin" or "Espeak" => VoiceEngine.Builtin, // eSpeak NG đã bỏ → dùng giọng "Có sẵn"
             _ => VoiceEngine.Auto,
         };
         set => VoiceEngineName = value.ToString();

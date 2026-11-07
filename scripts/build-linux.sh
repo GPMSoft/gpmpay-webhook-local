@@ -15,7 +15,8 @@
 #   artifacts/linux-<arch>/GpmPayWebhookLocal          (thư mục chạy ngay, kèm install.sh)
 #   artifacts/GpmPayWebhookLocal-linux-<arch>.tar.gz
 #
-# Khi chạy app cần: espeak-ng (giọng đọc), libnotify-bin (thông báo, tuỳ chọn),
+# Khi chạy app cần: pulseaudio-utils / pipewire / alsa-utils (phát âm thanh — distro desktop thường có sẵn),
+# libnotify-bin (thông báo, tuỳ chọn),
 # và môi trường desktop có khay hệ thống (KDE, XFCE, Cinnamon; GNOME cần extension AppIndicator).
 set -euo pipefail
 
@@ -68,7 +69,6 @@ StartupWMClass=GpmPayWebhookLocal
 DESKTOP
 command -v update-desktop-database >/dev/null && update-desktop-database "$APPS" >/dev/null 2>&1 || true
 echo "Đã thêm vào menu ứng dụng: GPMPay Webhook Local"
-command -v espeak-ng >/dev/null || echo "Gợi ý: cài giọng đọc tiếng Việt → sudo apt install espeak-ng"
 INSTALL
 chmod +x "$OUT/install.sh"
 

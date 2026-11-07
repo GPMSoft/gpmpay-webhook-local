@@ -40,7 +40,7 @@ GpmPayWebhookLocal/                ← project chính
 | Thư mục dữ liệu | `%LocalAppData%\GpmPayWebhookLocal` | `~/Library/Application Support/GpmPayWebhookLocal` | `~/.local/share/GpmPayWebhookLocal` |
 | Mã hoá API token | DPAPI (theo user Windows) | AES-GCM, khoá riêng `chmod 600` | AES-GCM, khoá riêng `chmod 600` |
 | Giọng hệ thống | Microsoft An (WinRT) | `say` — giọng Linh | Speech Dispatcher (`spd-say`) |
-| eSpeak NG | tự tải về (không cần Admin) | `brew install espeak-ng` | `sudo apt install espeak-ng` |
+| Phát âm thanh | MediaPlayer (WinRT) | `afplay` | `paplay` / `pw-play` / `aplay` |
 | Khởi động cùng máy | `HKCU\…\Run` | LaunchAgent `~/Library/LaunchAgents` | `~/.config/autostart/*.desktop` |
 | Khay / thông báo | system tray · toast | menu bar · Notification Center | StatusNotifierItem · `notify-send` |
 
@@ -53,7 +53,7 @@ Biến môi trường `GPMPAY_LOCAL_DATA_DIR` đổi thư mục dữ liệu (ti�
 Chọn trong **Cấu hình → Giọng đọc**:
 - **Tự động** (mặc định): giọng tiếng Việt của hệ điều hành nếu có (tự nhiên nhất), không thì **Có sẵn**.
 - **Có sẵn**: ghép 125 cụm âm thanh nhúng trong app (`Assets/Voice`, ~1,7MB) thành câu "Đã nhận … đồng".
-  Không cần cài gì, giọng giống nhau trên mọi hệ điều hành; câu khác số tiền thì tự chuyển sang giọng hệ điều hành / eSpeak NG.
+  Không cần cài gì, giọng giống nhau trên mọi hệ điều hành; câu khác số tiền thì tự chuyển sang giọng hệ điều hành.
   - Cụm lớn (cả số 1–99, "X trăm", "linh Y", "nghìn"…), cắt ra từ câu nói liền để giữ ngữ điệu:
     "Đã nhận | một triệu | hai trăm | năm mươi | nghìn | đồng".
   - Bộ âm thanh hiện tại tạo bằng giọng Microsoft An: `dotnet run tools/generate-voice.cs` (chạy trên Windows có giọng tiếng Việt).
@@ -61,12 +61,11 @@ Chọn trong **Cấu hình → Giọng đọc**:
 - **Windows / macOS / Speech Dispatcher**: giọng hệ điều hành.
   - Windows: Settings → Time & language → Speech → Add voices → Tiếng Việt (Microsoft An).
   - macOS: System Settings → Accessibility → Spoken Content → System voice → Manage Voices… → Tiếng Việt (Linh).
-- **eSpeak NG**: giọng máy, chạy offline. Windows: app tự tải bản chính thức
-  [eSpeak NG 1.52.0](https://github.com/espeak-ng/espeak-ng/releases/tag/1.52.0) (~13MB) vào thư mục dữ liệu.
 
 ### Linux — gói cần có khi chạy
+Phát âm thanh dùng `paplay` / `pw-play` / `aplay` (distro desktop thường có sẵn). Thông báo cần `notify-send`:
 ```bash
-sudo apt install espeak-ng libnotify-bin     # giọng đọc + thông báo
+sudo apt install libnotify-bin
 ```
 Khay hệ thống cần môi trường desktop hỗ trợ StatusNotifierItem (KDE, XFCE, Cinnamon…; GNOME cần extension *AppIndicator*).
 
@@ -90,7 +89,6 @@ Linux: giải nén rồi chạy `./GpmPayWebhookLocal`, hoặc `./install.sh` đ
 
 ## Giấy phép bên thứ ba
 - **Avalonia** — MIT.
-- **eSpeak NG** — GPL-3.0. Không đóng gói kèm app; Windows tải bản phát hành chính thức lúc chạy, macOS/Linux dùng bản người dùng tự cài; app gọi `espeak-ng` như một chương trình riêng.
 - **cloudflared** — Apache-2.0. Tải lúc chạy từ GitHub releases của Cloudflare (hoặc dùng bản có sẵn trên máy).
 - **Giọng "Có sẵn"** (`Assets/Voice`) — hiện tạo từ giọng Microsoft An của Windows để dùng thử.
   Trước khi phát hành rộng, cần kiểm tra điều khoản phân phối lại âm thanh của giọng đó, hoặc thay bằng giọng có giấy phép rõ ràng.

@@ -126,7 +126,6 @@ public partial class MainWindow : Window
 
         if (!startMinimized) Show();
         AddLog("Ứng dụng đã khởi động.");
-        _ = PrepareVoiceAsync();
 
         if (settings.AutoRun && !string.IsNullOrWhiteSpace(settings.ApiToken))
             Dispatcher.UIThread.Post(() => _ = StartAsync());
@@ -511,7 +510,6 @@ public partial class MainWindow : Window
         _settings.VoiceEngine = engine;
         _settings.Save();
         UpdateVoiceUi();
-        _ = PrepareVoiceAsync();
     }
 
     // ═════════ Âm thanh ═════════
@@ -554,20 +552,6 @@ public partial class MainWindow : Window
 
     private void TestSpeak_Click(object? sender, RoutedEventArgs e) =>
         _speech.Speak($"Đã nhận {VietnameseNumber.ToWords(1_250_000)} đồng", force: true);
-
-    private async Task PrepareVoiceAsync()
-    {
-        try
-        {
-            await _speech.PrepareAsync();
-        }
-        catch (Exception ex) when (OperatingSystem.IsWindows())
-        {
-            AddLog("Không tải được eSpeak NG: " + ex.Message);
-        }
-        catch { /* macOS / Linux: đã ghi hướng dẫn cài vào nhật ký */ }
-        UpdateVoiceUi();
-    }
 
     private void UpdateVoiceUi()
     {

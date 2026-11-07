@@ -92,7 +92,7 @@ public sealed class MacWavPlayer : IWavPlayer
 
 /// <summary>
 /// Linux: giọng hệ thống = Speech Dispatcher (<c>spd-say</c>). Không xác định chắc được có giọng Việt tự nhiên hay không
-/// nên chế độ Tự động ưu tiên eSpeak NG (đọc tiếng Việt tốt, có sẵn trong kho của hầu hết distro).
+/// nên chế độ Tự động dùng giọng "Có sẵn".
 /// </summary>
 public sealed class LinuxSystemVoice : ISystemVoice
 {

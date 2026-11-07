@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace GpmPayWebhookLocal.Platform;
 
-/// <summary>Tiện ích chạy tiến trình ngoài (say, afplay, espeak-ng, notify-send...) — truyền tham số qua ArgumentList để không lỗi dấu cách / ký tự đặc biệt.</summary>
+/// <summary>Tiện ích chạy tiến trình ngoài (say, afplay, paplay, notify-send...) — truyền tham số qua ArgumentList để không lỗi dấu cách / ký tự đặc biệt.</summary>
 public static class ProcessUtil
 {
     /// <summary>

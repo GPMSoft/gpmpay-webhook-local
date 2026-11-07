@@ -174,9 +174,7 @@
                                         <ComboBox Name="EngineBox" Classes="field" AutomationProperties.Name="Giọng đọc">
                                             <ComboBoxItem Content="Tự động" Tag="Auto" />
                                             <ComboBoxItem Content="Có sẵn" Tag="Builtin" />
-                                            <ComboBoxItem Name="EngineSystemItem" Content="Hệ thống" Tag="System" />
-                                            <ComboBoxItem Content="eSpeak NG" Tag="Espeak" />
-                                        </ComboBox>
+                                            <ComboBoxItem Name="EngineSystemItem" Content="Hệ thống" Tag="System" />                                        </ComboBox>
                                     </StackPanel>
                                 </Grid>
                                 <StackPanel Margin="0,14,0,0">
