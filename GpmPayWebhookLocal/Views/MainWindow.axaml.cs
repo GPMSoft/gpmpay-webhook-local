@@ -359,13 +359,16 @@ public partial class MainWindow : Window
     {
         if (IsExiting) return;
         IsExiting = true;
-        _tray.SetStatus("Đang thoát...");
+        // lỗi dọn dẹp nào cũng không được chặn việc thoát
+        try { _tray.SetStatus("Đang thoát..."); } catch { }
         try { await _controller.DisposeAsync(); } catch { }
-        _speech.Dispose();
-        _tray.Dispose();
-        Close();
+        try { _speech.Dispose(); } catch { }
+        try { _tray.Dispose(); } catch { }
+        try { Close(); } catch { }
         if (Application.Current?.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
             desktop.Shutdown();
+        else
+            Environment.Exit(0);
     }
 
     private void Hide_Click(object? sender, RoutedEventArgs e) => HideToTray();

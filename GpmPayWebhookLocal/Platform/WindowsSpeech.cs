@@ -62,10 +62,13 @@ public sealed class WindowsSpeech : ISystemVoice, IWavPlayer
         }
     }
 
+    private int _disposed;
+
     public void Dispose()
     {
-        _player.Dispose();
-        _synth.Dispose();
+        if (Interlocked.Exchange(ref _disposed, 1) != 0) return;
+        try { _player.Dispose(); } catch { }
+        try { _synth.Dispose(); } catch { }
     }
 }
 #endif

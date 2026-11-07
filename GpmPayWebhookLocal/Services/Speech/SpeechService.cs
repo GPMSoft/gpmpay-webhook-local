@@ -142,7 +142,9 @@ public sealed class SpeechService : IDisposable
     {
         _cts.Cancel();
         _queue.Writer.TryComplete();
-        _system.Dispose();
-        (_player as IDisposable)?.Dispose();
+        try { _system.Dispose(); } catch { }
+        // Windows: cùng một object vừa là giọng vừa là trình phát → không dispose 2 lần
+        if (!ReferenceEquals(_player, _system))
+            try { (_player as IDisposable)?.Dispose(); } catch { }
     }
 }
