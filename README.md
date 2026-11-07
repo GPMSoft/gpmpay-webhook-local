@@ -86,6 +86,8 @@ macOS: app được ký ad-hoc. Lần đầu mở nếu bị Gatekeeper chặn: 
 `xattr -dr com.apple.quarantine "GPMPay Webhook Local.app"`.
 
 Linux: giải nén rồi chạy `./GpmPayWebhookLocal`, hoặc `./install.sh` để thêm vào menu ứng dụng.
+Bản AOT cần glibc **không cũ hơn** máy build. CI build trong container Ubuntu 22.04 (glibc 2.35) → chạy được trên
+Ubuntu 22.04+, Debian 12+, Fedora 36+. Build tay trên distro mới hơn thì bản build chỉ chạy được trên distro mới tương đương.
 
 ## Giấy phép bên thứ ba
 - **Avalonia** — MIT.

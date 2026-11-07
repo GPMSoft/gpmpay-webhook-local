@@ -23,16 +23,6 @@ jobs:
             run: ./scripts/build-macos.sh universal
             shell: bash
             artifact: artifacts/GpmPayWebhookLocal-macos-universal.zip
-          - name: linux-x64
-            os: ubuntu-latest
-            run: ./scripts/build-linux.sh x64
-            shell: bash
-            artifact: artifacts/GpmPayWebhookLocal-linux-x64.tar.gz
-          - name: linux-arm64
-            os: ubuntu-24.04-arm
-            run: ./scripts/build-linux.sh arm64
-            shell: bash
-            artifact: artifacts/GpmPayWebhookLocal-linux-arm64.tar.gz
 
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
@@ -41,15 +31,11 @@ jobs:
       run:
         shell: ${{ matrix.shell }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: "10.0.x"
-
-      - name: Cài clang + zlib (Linux)
-        if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y clang zlib1g-dev
 
       - name: Cấp quyền chạy script
         if: runner.os != 'Windows'
@@ -58,7 +44,53 @@ jobs:
       - name: Build Native AOT
         run: ${{ matrix.run }}
 
-      - uses: actions/upload-artifact@v4
+      # archive: false → tải lên nguyên file .zip / .tar.gz (không bị nén thêm 1 lớp zip nữa);
+      # tên artifact = tên file
+      - uses: actions/upload-artifact@v7
         with:
-          name: GpmPayWebhookLocal-${{ matrix.name }}
           path: ${{ matrix.artifact }}
+          archive: false
+
+  # Linux: bản AOT cần glibc >= bản của máy build. Build trong container Ubuntu 22.04 (glibc 2.35)
+  # → chạy được trên Ubuntu 22.04+, Debian 12+, Fedora 36+… dù runner GitHub là Ubuntu mới hơn.
+  build-linux:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x64
+            os: ubuntu-24.04
+          - arch: arm64
+            os: ubuntu-24.04-arm
+
+    name: linux-${{ matrix.arch }}
+    runs-on: ${{ matrix.os }}
+    container: ubuntu:22.04
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Cài công cụ build (clang, zlib, ICU cho .NET SDK)
+        run: |
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            ca-certificates curl git clang binutils zlib1g-dev libicu70
+
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Build Native AOT
+        run: |
+          chmod +x scripts/*.sh
+          ./scripts/build-linux.sh ${{ matrix.arch }}
+
+      - name: Kiểm tra glibc tối đa mà file chạy cần
+        run: objdump -T artifacts/linux-${{ matrix.arch }}/GpmPayWebhookLocal | grep -o 'GLIBC_[0-9.]*' | sort -uV | tail -1
+
+      - uses: actions/upload-artifact@v7
+        with:
+          path: artifacts/GpmPayWebhookLocal-linux-${{ matrix.arch }}.tar.gz
+          archive: false
